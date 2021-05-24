@@ -1,10 +1,15 @@
 package com.stackroute.keepnote.service;
 
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.stackroute.keepnote.exception.ReminderNotCreatedException;
 import com.stackroute.keepnote.exception.ReminderNotFoundException;
 import com.stackroute.keepnote.model.Reminder;
+import com.stackroute.keepnote.repository.ReminderRepository;
 
 /*
 * Service classes are used here to implement additional business logic/validation 
@@ -16,6 +21,7 @@ import com.stackroute.keepnote.model.Reminder;
 * future.
 * */
 
+@Service
 public class ReminderServiceImpl implements ReminderService {
 
 	/*
@@ -23,14 +29,24 @@ public class ReminderServiceImpl implements ReminderService {
 	 * Constructor-based autowiring) Please note that we should not create any
 	 * object using the new keyword.
 	 */
+	
+	@Autowired
+	private ReminderRepository reminderRepository;
+	
+	public ReminderServiceImpl(ReminderRepository reminderRepository) {
+		this.reminderRepository = reminderRepository;
+	}
 
 	/*
 	 * This method should be used to save a new reminder.Call the corresponding
 	 * method of Respository interface.
 	 */
 	public Reminder createReminder(Reminder reminder) throws ReminderNotCreatedException {
-
-		return null;
+		reminder.setReminderCreationDate(new Date());
+		if(reminderRepository.insert(reminder) != null)
+			return reminder;
+		else
+			throw new ReminderNotCreatedException("Reminder not created...!1");
 	}
 
 	/*
@@ -38,8 +54,13 @@ public class ReminderServiceImpl implements ReminderService {
 	 * corresponding method of Respository interface.
 	 */
 	public boolean deleteReminder(String reminderId) throws ReminderNotFoundException {
-
-		return false;
+		Reminder reminder = reminderRepository.findById(reminderId).get();
+		if(reminder == null)
+			throw new ReminderNotFoundException("Reminder not found...!!");
+		else {
+			reminderRepository.delete(reminder);
+			return true;
+		}
 	}
 
 	/*
@@ -47,8 +68,15 @@ public class ReminderServiceImpl implements ReminderService {
 	 * corresponding method of Respository interface.
 	 */
 	public Reminder updateReminder(Reminder reminder, String reminderId) throws ReminderNotFoundException {
-
-		return null;
+		reminder.setReminderCreationDate(new Date());
+		Reminder newReminder = reminderRepository.findById(reminderId).get();
+		if(newReminder == null)
+			throw new ReminderNotFoundException("Reminder not found...!!");
+		else {
+			reminderRepository.deleteById(reminderId);
+			reminderRepository.insert(reminder);
+			return reminder;			
+		}
 	}
 
 	/*
@@ -56,8 +84,11 @@ public class ReminderServiceImpl implements ReminderService {
 	 * corresponding method of Respository interface.
 	 */
 	public Reminder getReminderById(String reminderId) throws ReminderNotFoundException {
-
-		return null;
+		Reminder reminder = reminderRepository.findById(reminderId).get();
+		if(reminder == null)
+			throw new ReminderNotFoundException("Reminder not found...!!");
+		else 
+			return reminder;
 	}
 
 	/*
@@ -66,8 +97,7 @@ public class ReminderServiceImpl implements ReminderService {
 	 */
 
 	public List<Reminder> getAllReminders() {
-
-		return null;
+		return reminderRepository.findAll();
 	}
 
 }

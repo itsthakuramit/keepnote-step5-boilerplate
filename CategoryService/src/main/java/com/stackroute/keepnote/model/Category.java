@@ -2,11 +2,15 @@ package com.stackroute.keepnote.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /*
  * Please note that this class is annotated with @Document annotation
  * @Document identifies a domain object to be persisted to MongoDB.
  *  */
 
+@Document
 public class Category {
 
 	/*
@@ -20,46 +24,76 @@ public class Category {
 	 * date. 
 	 */
 	
+	@Id
+	private String categoryId;
+	private String categoryName;
+	private String categoryDescription;
+	private Date categoryCreationDate;
+	private String categoryCreatedBy;
+	
+	
+    public Category() {
+	}
 
-    public String getId() {
-        return null;
-    }
 
-    public void setId(String id) {
-       
-    }
+	public Category(String categoryId, String categoryName, String categoryDescription, Date categoryCreationDate,
+			String categoryCreatedBy) {
+		super();
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+		this.categoryDescription = categoryDescription;
+		this.categoryCreationDate = categoryCreationDate;
+		this.categoryCreatedBy = categoryCreatedBy;
+	}
 
-    public String getCategoryName() {
-        return null;
-    }
 
-    public void setCategoryName(String categoryName) {
-       
-    }
+	public String getId() {
+		return categoryId;
+	}
 
-    public String getCategoryDescription() {
-        return null;
-    }
 
-    public void setCategoryDescription(String categoryDescription) {
-      
-    }
+	public void setId(String categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    public String getCategoryCreatedBy() {
-        return null;
-    }
 
-    public void setCategoryCreatedBy(String categoryCreatedBy) {
-        
-    }
+	public String getCategoryName() {
+		return categoryName;
+	}
 
-    public Date getCategoryCreationDate() {
-        return null;
-    }
 
-    public void setCategoryCreationDate(Date categoryCreationDate) {
-       
-    }
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 
+
+	public String getCategoryDescription() {
+		return categoryDescription;
+	}
+
+
+	public void setCategoryDescription(String categoryDescription) {
+		this.categoryDescription = categoryDescription;
+	}
+
+
+	public Date getCategoryCreationDate() {
+		return categoryCreationDate;
+	}
+
+
+	public void setCategoryCreationDate(Date categoryCreationDate) {
+		this.categoryCreationDate = categoryCreationDate;
+	}
+
+
+	public String getCategoryCreatedBy() {
+		return categoryCreatedBy;
+	}
+
+
+	public void setCategoryCreatedBy(String categoryCreatedBy) {
+		this.categoryCreatedBy = categoryCreatedBy;
+	}
 
 }
